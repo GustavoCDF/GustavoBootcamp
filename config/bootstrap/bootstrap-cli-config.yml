@@ -55,28 +55,48 @@ bootstrap:
     # Mapping between IDP (Azure Active Directory) groups and CDF groups.
     idp-cdf-mappings:
     # Support multiple CDF Projects, like dev/test/prod in one config.
-        - cdf-project: <CDF project name> # i.e. bootcamp-01-test
+        - cdf-project: cdf-bootcamp-16-test # i.e. bootcamp-01-test
           mappings:
               - cdf-group: cdf:root
-                idp-source-id: <Azure AD group id>
-                idp-source-name: <Azure AD group name>
+                idp-source-id: e88586a1-347a-489e-a69a-8e197a3100eb
+                idp-source-name: bootcamp-16-test-admin
               - cdf-group: cdf:all:owner
-                idp-source-id: <AAD Object Id> # for the AAD Group to be matched to cdf-group
-                idp-source-name: <AAD Group name> # i.e. bootcamp-01-test-all-owner
+                idp-source-id: 1dfecd0d-c5fc-494b-a255-e869cf825f40 # for the AAD Group to be matched to cdf-group
+                idp-source-name: bootcamp-16-test-all-owner # i.e. bootcamp-01-test-all-owner
               - cdf-group: cdf:all:read
-                idp-source-id: <AAD Object Id> # for the AAD Group to be matched to cdf-group
-                idp-source-name: <AAD Group name> # i.e. bootcamp-01-test-all-read
+                idp-source-id: 81aab642-7a26-4bb2-997b-1c4818b90b0f # for the AAD Group to be matched to cdf-group
+                idp-source-name: bootcamp-16-test-all-read # i.e. bootcamp-01-test-all-read
 
 
     namespaces:
         # Typical config will have a namespace for data sources ("src") and a namespace for use cases ("uc")
-        - ns-name: <Namespace name>
+        - ns-name: src
           description: Data sources for the Ice Cream Factory # HINT
-
           # Node names will normally follow src:001:srcname or uc:001:usecasename naming convention
           ns-nodes:
-              - node-name: <Node name>
-                description: Data from SAP # HINT
+              - node-name: src:001:sap
+                description: DSource 01 ata from SAP # HINT
+              - node-name: src:002:opcua
+                description: Source 02 data from opcua
+
+        # Typical config will have separate namespace by data source ("src") and use cases ("uc")
+        - ns-name: uc
+          description: Use cases representing the data/products
+          # Description names will normally follow src:001:srcname or uc:001:usecasename naming convention
+          ns-nodes:
+              - node-name: uc:001:oee            # Description names will normally follow src:001:srcname or uc:001:usecasename naming convention
+                ns-nodes:
+                    - node-name: uc:001:oee
+                      description: Use case 001 Over all Equipment effectiveness
+                      shared-access:
+                          read:
+                              - node-name: src:001:sap
+                              - node-name: src:002:opcua
+                description: Use case 001 Over all Equipment effectiveness
+                shared-access:
+                    read:
+                        - node-name: src:001:sap
+                        - node-name: src:002:opcua
         # HINT: Add another namespace below
 
 
